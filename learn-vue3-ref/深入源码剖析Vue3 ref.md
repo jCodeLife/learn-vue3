@@ -151,5 +151,9 @@ function add() {
 2. ref接受的原始数据可以是原始值也可以是引用值，返回的对象本质都是RefImpl类的实例
 3. 无论传入的原始数据时什么类型，当原始数据发生改变时，并不会影响响应数据，更不会触发UI的更新。但当响应式数据发生改变，对应界面UI是会自动更新的，注意不影响原始数据。所以ref中，原始数据和经过ref包装后的响应式数据是无关联的
 
+本文示例代码可在github查阅
+
+https://github.com/jCodeLife/learn-vue3/tree/master/learn-vue3-ref
+
 
 
