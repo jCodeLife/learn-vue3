@@ -51,7 +51,7 @@ console.log(count.constructor)
 
 然后，如果传入的是对象，返回结果如下：
 
-![image-20201118084115469](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201118084115469.png)
+![image-20201118084115469](C:\Users\Administrator\Desktop\learn-vue3\learn-vue3-ref\2.png)
 
 **对比发现，不管传递数据类型的数据给ref，无论是原始值还是引用值，返回的响应式数据对象本质都是由RefImpl类构造出来的对象**。但不同的是里头的value，一个是原始值，一个是Proxy对象
 
