@@ -1,0 +1,9 @@
+body .rain {
+    display: block;
+    width: 2px;
+    height: 50px;
+    background-image: radial-gradient(#fff 0%, rgba(255, 255, 255, 0) 60%);
+    margin: 0 auto;
+}
+  
+  

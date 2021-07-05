@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECharts最佳实践 | 总结30天更文的心路历程 </title>
+    <style>
+        body>div {
+            margin-top: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+        <div id="JP" style="width: 40vw;height:400px;"></div>
+        <div id="everydayJP" style="width: 40vw;height:400px;"></div>
+        <div id="three" style="width: 70vw;height:400px;"></div>
+        <div id="four" style="width: 88vw;height:500px;"></div>
+        <div id="five" style="width: 50vw;height:50vw;"></div>
+    </div>
+
+
+    <!-- 引入 ECharts 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+    <!-- 引人数据 -->
+    <script src="./data/data.js"></script>
+    <script>
+        // 文章标题title、发布时间date、阅读数viewsCount、评论数comment、收藏数collect、点赞数likesCount
+        // 首先我们要实现几个数据展示： 
+        // 0.计算得出每天新增的掘力值JP变化:likesCount+viewsCount/100   
+        // 1.30天的新增阅读数     
+        // 2.30天的新增点赞数        
+        // 3.30天的新增评论数
+        // 4.30天的新增关注数
+        // 5.30天的新增收藏数
+
+        // 开始，掘力值一个月的变化
+
+        var chartDom1 = document.getElementById('JP');
+        var myChart1 = echarts.init(chartDom1);
+        var one;
+        one = {
+            title: {
+                text: '30天掘力值变化图',
+                subtext: '掘力值'
+            },
+            xAxis: {
+                type: 'category',
+                data: myData.dailyData.date
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: myData.dailyData.JP,
+                type: 'line'
+            }]
+        };
+        one && myChart1.setOption(one);
+
+        // 0.2.每天新增的掘力值JP变化展示
+        var chartDom2 = document.getElementById('everydayJP');
+        var myChart2 = echarts.init(chartDom2);
+        var two;
+        two = {
+            title: {
+                text: '每日新增掘力值变化图',
+                subtext: '掘力值'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: { readOnly: false },
+                    magicType: { type: ['line', 'bar'] },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: myData.dailyData.date
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} '
+                }
+            },
+            series: [
+                {
+                    name: '新增掘力值',
+                    type: 'line',
+                    data: myData.dailyData.everydayJP,
+                    markPoint: {
+                        data: [
+                            { name: '周最低', value: -2, xAxis: 1, yAxis: -1.5 }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' },
+                            [{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'max'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    position: 'start',
+                                    formatter: '最大值'
+                                },
+                                type: 'max',
+                                name: '最高点'
+                            }]
+                        ]
+                    }
+                }
+            ]
+        };
+        two && myChart2.setOption(two);
+
+        // 每天的基础数据变化
+        var chartDom3 = document.getElementById('three');
+        var myChart3 = echarts.init(chartDom3, 'pink');
+        var three;
+
+        three = {
+            title: {
+                text: '每日阅读数新增量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['点赞数', '收藏数', '评论数', '关注数']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: myData.dailyData.date
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                // {
+                //     name: '点赞数',
+                //     type: 'line',
+                //     stack: '总量',
+                //     data: myData.dailyData.likesCount
+                // },
+                // {
+                //     name: '收藏数',
+                //     type: 'line',
+                //     stack: '总量',
+                //     data: myData.dailyData.collect
+                // },
+                // {
+                //     name: '评论数',
+                //     type: 'line',
+                //     stack: '总量',
+                //     data: myData.dailyData.comment
+                // },
+                // {
+                //     name: '关注数',
+                //     type: 'line',
+                //     stack: '总量',
+                //     data: myData.dailyData.follwers.increase
+                // },
+                {
+                    name: '阅读数',
+                    type: 'line',
+                    stack: '总量',
+                    data: myData.dailyData.viewsCount
+                }
+
+
+            ]
+        };
+
+        three && myChart3.setOption(three);
+
+
+
+        var app = {};
+        var chartDom4 = document.getElementById('four');
+        var myChart4 = echarts.init(chartDom4);
+        var four;
+
+
+        four = {
+            legend: {},
+            tooltip: {},
+            dataset: {
+                source: [
+                    ['product', '点赞数', '阅读数', '评论数', '收藏数'],
+                    [
+                        myData.dataFromAnArticle.title[29],
+                        myData.dataFromAnArticle.likesCount[29],
+                        myData.dataFromAnArticle.viewsCount[29],
+                        myData.dataFromAnArticle.comment[29],
+                        myData.dataFromAnArticle.collect[29]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[28],
+                        myData.dataFromAnArticle.likesCount[28],
+                        myData.dataFromAnArticle.viewsCount[28],
+                        myData.dataFromAnArticle.comment[28],
+                        myData.dataFromAnArticle.collect[28]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[27],
+                        myData.dataFromAnArticle.likesCount[27],
+                        myData.dataFromAnArticle.viewsCount[27],
+                        myData.dataFromAnArticle.comment[27],
+                        myData.dataFromAnArticle.collect[27]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[26],
+                        myData.dataFromAnArticle.likesCount[26],
+                        myData.dataFromAnArticle.viewsCount[26],
+                        myData.dataFromAnArticle.comment[26],
+                        myData.dataFromAnArticle.collect[26]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[25],
+                        myData.dataFromAnArticle.likesCount[25],
+                        myData.dataFromAnArticle.viewsCount[25],
+                        myData.dataFromAnArticle.comment[25],
+                        myData.dataFromAnArticle.collect[25]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[24],
+                        myData.dataFromAnArticle.likesCount[24],
+                        myData.dataFromAnArticle.viewsCount[24],
+                        myData.dataFromAnArticle.comment[24],
+                        myData.dataFromAnArticle.collect[24]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[23],
+                        myData.dataFromAnArticle.likesCount[23],
+                        myData.dataFromAnArticle.viewsCount[23],
+                        myData.dataFromAnArticle.comment[23],
+                        myData.dataFromAnArticle.collect[23]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[22],
+                        myData.dataFromAnArticle.likesCount[22],
+                        myData.dataFromAnArticle.viewsCount[22],
+                        myData.dataFromAnArticle.comment[22],
+                        myData.dataFromAnArticle.collect[22]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[21],
+                        myData.dataFromAnArticle.likesCount[21],
+                        myData.dataFromAnArticle.viewsCount[21],
+                        myData.dataFromAnArticle.comment[21],
+                        myData.dataFromAnArticle.collect[21]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[20],
+                        myData.dataFromAnArticle.likesCount[20],
+                        myData.dataFromAnArticle.viewsCount[20],
+                        myData.dataFromAnArticle.comment[20],
+                        myData.dataFromAnArticle.collect[20]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[19],
+                        myData.dataFromAnArticle.likesCount[19],
+                        myData.dataFromAnArticle.viewsCount[19],
+                        myData.dataFromAnArticle.comment[19],
+                        myData.dataFromAnArticle.collect[19]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[18],
+                        myData.dataFromAnArticle.likesCount[18],
+                        myData.dataFromAnArticle.viewsCount[18],
+                        myData.dataFromAnArticle.comment[18],
+                        myData.dataFromAnArticle.collect[18]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[17],
+                        myData.dataFromAnArticle.likesCount[17],
+                        myData.dataFromAnArticle.viewsCount[17],
+                        myData.dataFromAnArticle.comment[17],
+                        myData.dataFromAnArticle.collect[17]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[16],
+                        myData.dataFromAnArticle.likesCount[16],
+                        myData.dataFromAnArticle.viewsCount[16],
+                        myData.dataFromAnArticle.comment[16],
+                        myData.dataFromAnArticle.collect[16]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[15],
+                        myData.dataFromAnArticle.likesCount[15],
+                        myData.dataFromAnArticle.viewsCount[15],
+                        myData.dataFromAnArticle.comment[15],
+                        myData.dataFromAnArticle.collect[15]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[14],
+                        myData.dataFromAnArticle.likesCount[14],
+                        myData.dataFromAnArticle.viewsCount[14],
+                        myData.dataFromAnArticle.comment[14],
+                        myData.dataFromAnArticle.collect[14]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[13],
+                        myData.dataFromAnArticle.likesCount[13],
+                        myData.dataFromAnArticle.viewsCount[13],
+                        myData.dataFromAnArticle.comment[13],
+                        myData.dataFromAnArticle.collect[13]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[12],
+                        myData.dataFromAnArticle.likesCount[12],
+                        myData.dataFromAnArticle.viewsCount[12],
+                        myData.dataFromAnArticle.comment[12],
+                        myData.dataFromAnArticle.collect[12]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[11],
+                        myData.dataFromAnArticle.likesCount[11],
+                        myData.dataFromAnArticle.viewsCount[11],
+                        myData.dataFromAnArticle.comment[11],
+                        myData.dataFromAnArticle.collect[11]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[10],
+                        myData.dataFromAnArticle.likesCount[10],
+                        myData.dataFromAnArticle.viewsCount[10],
+                        myData.dataFromAnArticle.comment[10],
+                        myData.dataFromAnArticle.collect[10]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[9],
+                        myData.dataFromAnArticle.likesCount[9],
+                        myData.dataFromAnArticle.viewsCount[9],
+                        myData.dataFromAnArticle.comment[9],
+                        myData.dataFromAnArticle.collect[9]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[8],
+                        myData.dataFromAnArticle.likesCount[8],
+                        myData.dataFromAnArticle.viewsCount[8],
+                        myData.dataFromAnArticle.comment[8],
+                        myData.dataFromAnArticle.collect[8]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[7],
+                        myData.dataFromAnArticle.likesCount[7],
+                        myData.dataFromAnArticle.viewsCount[7],
+                        myData.dataFromAnArticle.comment[7],
+                        myData.dataFromAnArticle.collect[7]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[6],
+                        myData.dataFromAnArticle.likesCount[6],
+                        myData.dataFromAnArticle.viewsCount[6],
+                        myData.dataFromAnArticle.comment[6],
+                        myData.dataFromAnArticle.collect[6]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[5],
+                        myData.dataFromAnArticle.likesCount[5],
+                        myData.dataFromAnArticle.viewsCount[5],
+                        myData.dataFromAnArticle.comment[5],
+                        myData.dataFromAnArticle.collect[5]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[4],
+                        myData.dataFromAnArticle.likesCount[4],
+                        myData.dataFromAnArticle.viewsCount[4],
+                        myData.dataFromAnArticle.comment[4],
+                        myData.dataFromAnArticle.collect[4]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[3],
+                        myData.dataFromAnArticle.likesCount[3],
+                        myData.dataFromAnArticle.viewsCount[3],
+                        myData.dataFromAnArticle.comment[3],
+                        myData.dataFromAnArticle.collect[3]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[2],
+                        myData.dataFromAnArticle.likesCount[2],
+                        myData.dataFromAnArticle.viewsCount[2],
+                        myData.dataFromAnArticle.comment[2],
+                        myData.dataFromAnArticle.collect[2]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[1],
+                        myData.dataFromAnArticle.likesCount[1],
+                        myData.dataFromAnArticle.viewsCount[1],
+                        myData.dataFromAnArticle.comment[1],
+                        myData.dataFromAnArticle.collect[1]
+                    ]
+                    ,
+                    [
+                        myData.dataFromAnArticle.title[0],
+                        myData.dataFromAnArticle.likesCount[0],
+                        myData.dataFromAnArticle.viewsCount[0],
+                        myData.dataFromAnArticle.comment[0],
+                        myData.dataFromAnArticle.collect[0]
+                    ]
+
+
+                ]
+            },
+            xAxis: { type: 'category' },
+            yAxis: {},
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            series: [
+                { type: 'bar' },
+                { type: 'bar' },
+                { type: 'bar' },
+                { type: 'bar' }
+            ]
+        };
+
+        for (let i = 29; i < 0; i--) {
+            four.dataset.source.push(
+                [
+                    myData.dataFromAnArticle.title[i],
+                    myData.dataFromAnArticle.likesCount[i],
+                    myData.dataFromAnArticle.viewsCount[i],
+                    myData.dataFromAnArticle.comment[i],
+                    myData.dataFromAnArticle.collect[i]
+                ])
+
+        }
+        console.log(
+            four.dataset.source
+        );
+        four && myChart4.setOption(four);
+
+        // 55555555555555
+        var chartDom5 = document.getElementById('five');
+        var myChart5 = echarts.init(chartDom5);
+        var five;
+
+        five = {
+            title: {
+                text: '点赞量的占比',
+                subtext: '《人家都三胎了，你还没女朋友？那来画一个！》',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        { value: 5484, name: '总阅读数' },
+                        { value: 69, name: '点赞数' },
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        five && myChart5.setOption(five);
+
+
+    </script>
+
+</body>
+
+</html>
