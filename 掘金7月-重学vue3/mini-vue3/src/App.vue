@@ -1,9 +1,6 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
-  <h1>{{name}}</h1>
-
-  <h1>{{age}}</h1>
+  <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+  <HelloWorld />
 </template>
 
 <script>
@@ -16,12 +13,8 @@ export default {
   },
   data() {
     return {
-      name: 'Alice'
+
     }
-  },
-  mounted(){
-    console.log(`组件挂载了,修改name属性~`);
-    this.name = 'Tom';
   }
 }
 </script>

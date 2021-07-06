@@ -1,28 +1,22 @@
 <template>
-  <h1>{{ msg }}</h1>
-  <button @click="add">count is: {{ count }}</button>
-  <p>Edit <code>components/HelloWorld.vue</code> to test hot module replacement.</p>
+  <h1>{{ count }}</h1>
 </template>
 
 <script>
 export default {
   name: "HelloWorld",
-  props: {
-    msg: String,
-  },
-  data() {    
+  data() {
     return {
       count: 0
-    };
+    }
   },
-  methods:{
-    add(){
-      return this.count++
-    },
-    //...
+  watch:{
+    count(val){
+      console.log('执行了监听器count');
+    }
   },
   mounted(){
-    console.log(this.add);
+    this.count ++
   }
 };
 </script>
