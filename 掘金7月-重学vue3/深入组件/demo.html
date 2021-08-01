@@ -1,4 +1,4 @@
-<div id="app">
+<!-- <div id="app">
     <h1>{{title}}</h1>
 </div>
 <script src="https://unpkg.com/vue@next"></script>
@@ -23,7 +23,7 @@
         }
     })
     app.mount('#app');
-</script>
+</script> -->
 
 
 <!-- <div id="app">
@@ -395,6 +395,36 @@ export default {
             }
         },
         components: { 'my-component': MyComponent }
+    })
+    app.mount('#app');
+</script> -->
+
+
+<!-- 
+<div id="app">
+    <h1>inject</h1>
+    <my-comp></my-comp>
+</div>
+<script src="https://unpkg.com/vue@next"></script>
+
+<script>
+    const { createApp } = Vue
+    const app = createApp({
+
+    })
+    app.component('my-comp', {
+        template: '<p>my-comp</p><my-comp2></my-comp2>',
+        components: {
+            'my-comp2': {
+                template: '<p>my-comp2</p>{{a}}',
+                inject:['a']
+            }
+        },
+        provide() {
+            return {
+                a: 1
+            }
+        }
     })
     app.mount('#app');
 </script> -->
